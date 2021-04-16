@@ -18,12 +18,12 @@ def split_patient(patient_ids, df):
   return df_train, df_test
 
 
-
 def get_sum(prediction):
   c = 0
   for i in prediction:
     c += int(i)
   return c
+
 
 def prediction(df, transition_matrix, N,M,rand =  False):
   patient_ids = df['PERSON_CD'].unique()
@@ -177,9 +177,9 @@ if __name__ == '__main__':
     # test_id_file.close()      
     # tran_matrix.close()
 
-    test_id_file = open("testIds_new.txt","w")
-    get_Test_Ids(test_id_file)
-    test_id_file.close()
+    # test_id_file = open("testIds_new.txt","w")
+    # get_Test_Ids(test_id_file)
+    # test_id_file.close()
 
       
 

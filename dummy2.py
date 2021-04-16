@@ -18,6 +18,12 @@ def split_patient(patient_ids, df):
   return df_train, df_test
 
 
+def split_patient_2(df):
+  df_train = df[df.day_since <=5]
+  df_test = df[df.day_since > 5]
+  return df_train, df_test
+
+
 
 def get_sum(prediction):
   c = 0
@@ -130,39 +136,28 @@ def get_state_sum(vals):
 def GridSearchNM(N,M,df,dic,iter = 1, rand = False):
     pred_result = []
     fake_result = []
+    df_train, df_test = split_patient_2(df = df)
     for i in range(iter):
         print("iter: ",i)
-        df_train, df_test = split_patient(df.PERSON_CD.unique(), df = df)
         transition_matrix_train = get_transition_matrix_M_N(N,M,df_train)
         pred = prediction(df_test, transition_matrix_train,N,M)
         pred_fake = prediction(df_test, transition_matrix_train,N,M, rand=True)
         
         pred_result.append(sum(pred)/len(pred))
         fake_result.append(sum(pred_fake)/len(pred_fake))
-    key = "N" + str(N) + "M" + str(M)
-    plt.hist(pred_result, label ="markov"+key)
-    if rand:
-      plt.hist(fake_result, label ="random")
-      plt.xlabel("accuracy")
-      plt.ylabel("freq")
-      plt.title(key + " accuracy distribution")
-      plt.xv
-      plt.legend()
-    if rand:
-      plt.savefig(key+".png")
-    dic[key] ={'markov' :np.sum(pred_result), 'random': np.mean(fake_result)}
+    return pred_result, fake_result
 
     
 
 if __name__ == '__main__':
 
-    df = pd.read_csv('df_age.csv')
-    NMs = [(6,1), (7,1),(8,1),(9,1),(10,1)]
-    dic = {}  
-    for item in NMs:
-        print('Dummy 2 File --N'+str(item[0]) + "M" +str(item[1]))
-        
-        GridSearchNM(item[0],item[1],df,dic,iter = 20)
+    df = pd.read_csv('df_new_param.csv')
+    # NMs = [(2,3)]
+    # dic = {} 
+    # GridSearchNM(2,item[1],df,dic,iter = 10) 
+    # for item in NMs:
+    #     print('N'+str(item[0]) + "M" +str(item[1]))
+    #     GridSearchNM(item[0],item[1],df,dic,iter = 10)
 
 
 
